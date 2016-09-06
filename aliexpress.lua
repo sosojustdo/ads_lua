@@ -35,34 +35,47 @@ elseif "POST" == request_method then
 end
 
 --get ip
-local remote_ip = ngx.req.get_headers()["X-Real-IP"]
+local remote_ip =  ngx.var.remote_addr
 if remote_ip == nil then
-	remote_ip =  ngx.var.remote_addr
+	remote_ip = ngx.req.get_headers()["X-Real-IP"]
 end
 
 ngx.log(ngx.INFO, "\n","remote_ip:"..remote_ip)
 
 --get local by ip address
 local ip_args = {
-	
+	format = "json",
+	ip = remote_ip
 }
-common.read_http(args)
+
+local country
+
+common.read_http(config_tab["ip_url"], ip_args)
 local common_tab = common.common_tab
 local ip_result = common_tab["http_body"]
+if ip_result ~= nil then
+	local ip_obj = json.decode(ip_result)
+	if ip_obj ~= nil then
+		country = ip_obj.country
+	end
+end
+
+
+--redirect controller
+if country ~= nil and country == "巴西" then
+	--replace gclid param
+	local final_redirect_params = string.gsub(redirect_params, "gclid", "aff_sub")
+	local full_redirect_url = config_tab["aliexpress_extend_url"]..final_redirect_params
+	ngx.log(ngx.INFO, "\n" ,"redirect_aliexpress_extend_url:"..full_redirect_url)
+	ngx.redirect(full_redirect_url)
+else
+	ngx.log(ngx.INFO, "\n" ,"redirect_aliexpress_other_url:"..config_tab["aliexpress_other_url"])
+	ngx.redirect(config_tab["aliexpress_other_url"])
+end
 
 
 
 
---replace gclid param
-local final_redirect_params = string.gsub(redirect_params, "gclid", "aff_sub")
-
-ngx.log(ngx.INFO, "\n","redirect_params_is:"..final_redirect_params)
-
-local full_redirect_url = config_tab["config_redirect_url"]..final_redirect_params
-
-ngx.log(ngx.INFO, "\n" ,"full_redirect_url:"..full_redirect_url)
-
-ngx.redirect(full_redirect_url)
 
 
 

@@ -15,9 +15,9 @@ local function read_http(uri, args)
 		http_args = http_args..key.."="..val.."&"
 	end
 
-	local resp, err = httpc:request_uri(http_uri, {
+	local resp, err = httpc:request_uri(uri, {
 		method = "GET",
-		path = "/media/api2.go"..http_args
+		path = "/"..http_args
 	})
 
 	if not resp then
