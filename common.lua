@@ -6,7 +6,7 @@ local ngx_INFO = ngx.INFO
 local common_tab = {}
 local config = ngx.shared.config
 
-local function read_http(uri, args)
+local function read_http(uri, uri1, args)
 	--创建http客户端实例
 	local httpc = http.new()
 
@@ -17,10 +17,11 @@ local function read_http(uri, args)
 
 	local resp, err = httpc:request_uri(uri, {
 		method = "GET",
-		path = "/"..http_args
+        path = uri1..http_args
 	})
 
 	if not resp then
+		ngx.log(ngx.INFO, "\n" ,"request error :"..err)
 		ngx.say("request error :", err)
 		return
 	end

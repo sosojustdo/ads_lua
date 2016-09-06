@@ -1,6 +1,7 @@
 local config = require "config"
 local common = require "common"
 local json = require "json"
+local cjson = require "cjson"
 
 local config_tab = config.config_tab
 
@@ -50,16 +51,20 @@ local ip_args = {
 
 local country
 
-common.read_http(config_tab["ip_url"], ip_args)
+common.read_http(config_tab["ip_url"], "/iplookup/iplookup.php", ip_args)
 local common_tab = common.common_tab
 local ip_result = common_tab["http_body"]
+ngx.log(ngx.INFO, "\n" ,"ip_result:"..ip_result)
 if ip_result ~= nil then
-	local ip_obj = json.decode(ip_result)
-	if ip_obj ~= nil then
-		country = ip_obj.country
+	local data = cjson.decode(ip_result);
+	--local ip_obj = json.decode(ip_result)
+	ngx.log(ngx.INFO, "\n" ,"ip_obj:"..data)
+	if data ~= nil then
+		country = data["country"]
 	end
 end
 
+ngx.log(ngx.INFO, "\n" ,"country:"..country)
 
 --redirect controller
 if country ~= nil and country == "巴西" then
