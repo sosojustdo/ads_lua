@@ -57,8 +57,6 @@ local ip_result = common_tab["http_body"]
 ngx.log(ngx.INFO, "\n" ,"ip_result:"..ip_result)
 if ip_result ~= nil then
 	local data = cjson.decode(ip_result);
-	--local ip_obj = json.decode(ip_result)
-	ngx.log(ngx.INFO, "\n" ,"ip_obj:"..data)
 	if data ~= nil then
 		country = data["country"]
 	end
