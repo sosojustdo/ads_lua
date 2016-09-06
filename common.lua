@@ -1,5 +1,4 @@
 local http = require "resty.http"
-local ck = require "resty.cookie"
 
 local ngx_log = ngx.log
 local ngx_ERR = ngx.ERR
