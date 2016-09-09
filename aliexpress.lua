@@ -2,6 +2,7 @@ local config = require "config"
 local common = require "common"
 local json = require "json"
 local cjson = require "cjson"
+local find = string.find
 
 local config_tab = config.config_tab
 
@@ -64,8 +65,9 @@ end
 
 ngx.log(ngx.INFO, "\n" ,"country:"..country)
 
+local find_result = find(config_tab["countrys"], country, 1, true)
 --redirect controller
-if country ~= nil and country == "巴西" then
+if country ~= nil and find_result ~= nil then
 	--replace gclid param
 	local final_redirect_params = string.gsub(redirect_params, "gclid", "aff_sub")
 	local full_redirect_url = config_tab["aliexpress_extend_url"]..final_redirect_params
