@@ -36,7 +36,7 @@ local final_redirect_params = string.gsub(redirect_params, "gclid", "aff_sub")
 
 --ngx.log(ngx.INFO, "\n","redirect_params_is:"..final_redirect_params)
 
-local full_redirect_url = config_tab["huajiao_redirect_url"]..final_redirect_params
+local full_redirect_url = config_tab["wmp_redirect_url"]..final_redirect_params
 
 ngx.log(ngx.INFO, "\n" ,"full_redirect_url:"..full_redirect_url)
 
